@@ -1,1 +1,2 @@
-langkah pertama Login page
+LOGIN ADMIN
+LOGIN USER
