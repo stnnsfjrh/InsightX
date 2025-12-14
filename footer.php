@@ -1,6 +1,6 @@
 <div class="footer">
     <div class="footer-left">
-        <img src="assets/foto1.png" alt="InsightX">
+        <img src="assets/foto7.png" alt="InsightX">
         <p>Koneksi cepat, stabil, dan terpercaya untuk semua aktivitas Anda.</p>
     </div>
 
