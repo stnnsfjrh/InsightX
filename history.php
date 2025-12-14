@@ -1,12 +1,35 @@
 <?php
-// Contoh data transaksi (bisa diganti query DB)
-$riwayat = [
-    ["judul" => "Pembelian Motor R15", "status" => "Diproses", "tanggal" => "2025-01-15"],
-    ["judul" => "Pembelian Aksesoris Helm", "status" => "Selesai", "tanggal" => "2025-01-12"],
-    ["judul" => "Servis Motor", "status" => "Diproses", "tanggal" => "2025-01-10"]
-];
+session_start();
+require "db.php";
 
-$filter = $_GET['filter'] ?? "semua";
+// cek login user
+if (!isset($_SESSION['user'])) {
+    header("Location: login.php");
+    exit;
+}
+
+$user = $_SESSION['user'];
+$user_id = $user['id'];
+
+// ambil semua riwayat pembayaran user
+$query = "?user_id=eq.$user_id";
+$res = supabase("GET", "riwayat_pembayaran", null, $query);
+$riwayat = $res["data"] ?? [];
+
+// ambil semua produk
+$resProduk = supabase("GET", "produk");
+$produkList = $resProduk["data"] ?? [];
+
+// buat mapping id produk -> nama produk
+$produkMap = [];
+foreach ($produkList as $p) {
+    $produkMap[$p['id']] = $p['nama'];
+}
+
+// urutkan riwayat terbaru ke lama
+usort($riwayat, function($a, $b) {
+    return strtotime($b['created_at']) - strtotime($a['created_at']);
+});
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -24,58 +47,47 @@ $filter = $_GET['filter'] ?? "semua";
     Riwayat Transaksi
 </div>
 
-<!-- Tabs --> 
- <div class="tabs"> 
-    <a href="?filter=semua" class="category-pills <?= $filter=='semua'?'active':'' ?>">Semua</a>
-     <a href="?filter=diproses" class="category-pills <?= $filter=='diproses'?'active':'' ?>">Diproses</a>
-      <a href="?filter=selesai" class="category-pills <?= $filter=='selesai'?'active':'' ?>">Selesai</a>
-     </div>
-
 <!-- LIST -->
 <div class="list">
-<?php
-$ada = false;
-foreach ($riwayat as $item) {
-    if ($filter == "semua" || strtolower($item["status"]) == strtolower($filter)) {
-        $ada = true;
-?>
-<a href="detail_transaksi.php?id=<?= urlencode($item['judul']) ?>" class="history-card-link">
-    <div class="history-card">
-        
-        <div class="card-left">
-            <div class="icon-box">
-                <i class="ri-global-line"></i>
+<?php if (!empty($riwayat)): ?>
+    <?php foreach ($riwayat as $item): ?>
+    <a href="detail_transaksi.php?id=<?= $item['id'] ?>" class="history-card-link">
+        <div class="history-card">
+
+            <div class="card-left">
+                <div class="icon-box">
+                    <i class="ri-global-line"></i>
+                </div>
+
+                <div class="card-text">
+                    <span class="card-title">TRANSAKSI</span>
+                    <span class="card-sub">
+                        <?= htmlspecialchars($produkMap[$item['produk_id']] ?? "Produk #" . $item['produk_id']) ?>
+                    </span>
+                    <span class="card-method">
+                        Metode: <?= htmlspecialchars($item['metode_pembayaran'] ?? "Tidak diketahui") ?>
+                    </span>
+                    <span class="card-date">
+                        <?php 
+                            $dt = new DateTimeImmutable($item['created_at']);
+                            $dt = $dt->setTimezone(new DateTimeZone('Asia/Jakarta'));
+                            echo $dt->format("d M Y");
+                        ?>
+                    </span>
+                </div>
             </div>
 
-            <div class="card-text">
-                <span class="card-title">PEMBELIAN PAKET</span>
-                <span class="card-sub"><?= $item["judul"] ?></span>
-                <span class="card-date"><?= date("d M Y", strtotime($item["tanggal"])) ?></span>
-            </div>
-        </div>
-
-        <div class="card-right">
-            <?php if ($item["status"] == "Selesai"): ?>
+            <div class="card-right">
+                <!-- Status selalu BERHASIL -->
                 <span class="badge-status badge-success">BERHASIL</span>
+            </div>
 
-            <?php elseif ($item["status"] == "Diproses"): ?>
-                <span class="badge-status badge-proses">DIPROSES</span>
-
-            <?php else: ?>
-                <span class="badge-status badge-gagal"><?= strtoupper($item["status"]) ?></span>
-            <?php endif; ?>
         </div>
-
-    </div>
-</a>
-<?php
-    }
-}
-
-if (!$ada) {
-    echo "<div class='no-data'>Tidak ada transaksi</div>";
-}
-?>
+    </a>
+    <?php endforeach; ?>
+<?php else: ?>
+    <div class="no-data">Tidak ada transaksi</div>
+<?php endif; ?>
 </div>
 
 </body>
