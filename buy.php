@@ -33,6 +33,8 @@ $produkBuy = $produkBuy["data"] ?? [];
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
     <meta charset="UTF-8">
     <title>Buy</title>
     <link rel="stylesheet" href="css/buy.css">

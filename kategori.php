@@ -85,6 +85,8 @@ $judulKategori = $kategoriList[0]['nama'];
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
     <meta charset="UTF-8">
     <title>Kategori - <?= htmlspecialchars($judulKategori); ?></title>
     <link rel="stylesheet" href="css/buy.css">

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
     <meta charset="UTF-8">
     <title>Pembayaran Berhasil - InsightX</title>
     <link rel="stylesheet" href="css/checkout.css">

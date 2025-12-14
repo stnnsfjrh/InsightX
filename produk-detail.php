@@ -65,6 +65,8 @@ $id_produk = isset($produk['id']) ? $produk['id'] : $id;
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
     <meta charset="UTF-8">
     <title><?= htmlspecialchars($nama); ?></title>
     <link rel="stylesheet" href="css/detail.css">

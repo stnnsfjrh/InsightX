@@ -27,13 +27,19 @@ foreach ($produkList as $p) {
 }
 
 // urutkan riwayat terbaru ke lama
-usort($riwayat, function($a, $b) {
-    return strtotime($b['created_at']) - strtotime($a['created_at']);
+usort($riwayat, function ($a, $b) {
+    $timeA = !empty($a['created_at']) ? strtotime($a['created_at']) : 0;
+    $timeB = !empty($b['created_at']) ? strtotime($b['created_at']) : 0;
+
+    return $timeB <=> $timeA;
 });
+
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Riwayat Transaksi</title>

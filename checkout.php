@@ -28,6 +28,8 @@ $produk = $get["data"][0];
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
     <meta charset="UTF-8">
     <title>Checkout - <?= $produk['nama']; ?></title>
     <link rel="stylesheet" href="css/checkout.css">

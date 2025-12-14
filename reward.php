@@ -12,6 +12,8 @@ $reward = [
 <!DOCTYPE html>
 <html lang="id">
 <head>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
     <meta charset="UTF-8">
     <title>Reward</title>
     <link rel="stylesheet" href="css/reward.css">
